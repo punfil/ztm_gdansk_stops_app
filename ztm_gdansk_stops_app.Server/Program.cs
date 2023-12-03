@@ -91,18 +91,19 @@ app.MapGet("/listuserstops/{userId}", async (int userId, ApplicationDbContext db
     foreach (var stopId in stopsId ?? new List<int>())
     {
         var jsonResponse = await fetchDataFromUri($"http://ckan2.multimediagdansk.pl/delays?stopId={stopId}");
-        var infoArray = JsonConvert.DeserializeObject<UserDataCKAN>(jsonResponse ?? "")?.delay;
+        var infoArray = JsonConvert.DeserializeObject<UserDataCKAN>(jsonResponse ?? "");
 
         var arrayWrap = new UserData
         {
-            Delays = infoArray!,
-            StopId = stopId
+            Delays = infoArray.delay,
+            StopId = stopId,
+            LastUpdate = infoArray.lastUpdate
         };
 
         if (infoArray != null) arrayWraps.Add(arrayWrap);
     }
 
-    return JsonSerializer.Serialize(arrayWraps);
+    return arrayWraps;
 });
 
 app.MapGet("/stopinfo/{stopId}", async (int stopId) =>
@@ -124,8 +125,7 @@ app.MapGet("/stops", async () =>
     return list;
 });
 
-// from query
-app.MapPost("/addstop", async (int userId, int stopId, ApplicationDbContext db) =>
+app.MapPost("/addstop/{userId}&{stopId}", async (int userId, int stopId, ApplicationDbContext db) =>
 {
     try
     {
@@ -149,7 +149,7 @@ async Task<string?> fetchDataFromUri(string uri)
     return jsonContent;
 }
 
-app.MapDelete("/deletestop", async (int userId, int stopId, ApplicationDbContext db) =>
+app.MapDelete("/deletestop/{userId}&{stopId}", async (int userId, int stopId, ApplicationDbContext db) =>
 {
     try
     {

@@ -8,10 +8,13 @@
         <li v-on:click="fetchStops">List stops</li>
         <li v-if="!loggedIn" v-on:click="loginTrigger">Login</li>
         <li v-if="loggedIn" v-on:click="listUserStops">List user favourite stops</li>
+        <li v-if="loggedIn" v-on:click="logout">Logout</li>
     </ul>
+    <br />
     <h1>
         RAILAB4 184657 Panfil Wojciech - zkm_gdansk_stops_app
     </h1>
+    <br />
     <header v-if="msg" class="error">
         {{ msg }}
     </header>
@@ -139,29 +142,48 @@
     <!-- List user stops -->
     <div v-if="userStops" class="content">
         <h2>User stops:</h2>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Stop ID</th>
-                    <th>Stop Name</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="stop in stops" :key="stop.stopId">
-                    <td>{{ stop.stopId }}</td>
-                    <td>{{ stop.stopDesc }}</td>
-                    <td>{{ stop.stopLat }}</td>
-                    <td>{{ stop.stopLon }}</td>
-                    <td>
-                        <button v-on:click="showStopDetails(stop.stopId)">Show delays</button>
-                        <button v-if="loggedIn" v-on:click="removeFromUserFav(stop.stopId)">Remove from favourites</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul>
+            <li v-for="stop in userStops" :key="stop.StopId">
+                <strong>Stop ID:</strong> {{ stop.stopId }}<br>
+                <strong>Last Update:</strong> {{ stop.lastUpdate }}<br>
+                <strong>Delays:</strong>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Delay (seconds)</th>
+                            <th>Estimated Time</th>
+                            <th>Headsign</th>
+                            <th>Route Id</th>
+                            <th>Trip Id</th>
+                            <th>Status</th>
+                            <th>Theoretical Time</th>
+                            <th>Timestamp</th>
+                            <th>Trip</th>
+                            <th>Vehicle Code</th>
+                            <th>Vehicle Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="delayInfo in stop.delays" :key="delayInfo.id">
+                            <td>{{ delayInfo.id }}</td>
+                            <td>{{ delayInfo.delayInSeconds }}</td>
+                            <td>{{ delayInfo.estimatedTime }}</td>
+                            <td>{{ delayInfo.headsign }}</td>
+                            <td>{{ delayInfo.routeId }}</td>
+                            <td>{{ delayInfo.tripId }}</td>
+                            <td>{{ delayInfo.status }}</td>
+                            <td>{{ delayInfo.theoreticalTime }}</td>
+                            <td>{{ delayInfo.timestamp }}</td>
+                            <td>{{ delayInfo.trip }}</td>
+                            <td>{{ delayInfo.vehicleCode }}</td>
+                            <td>{{ delayInfo.vehicleId }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button v-on:click="removeFromUserFav(stop.StopId)">Remove from favourite</button>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -245,12 +267,14 @@
                 this.addUserMode = true;
             },
             addUser() {
+                this.loading = true;
                 const url = `adduser/${this.id}&${this.username}&${this.password}`;
                 this.setAllDisplaysNull();
                 fetch(url, {
                     method: 'POST',
                 })
                     .then(response => {
+                        this.loading = false;
                         if (!response.ok) {
                             this.msg = "Failed to add user."
                             return;
@@ -261,9 +285,11 @@
                     })
             },
             deleteUser(userID) {
+                this.loading = true;
                 this.setAllDisplaysNull();
                 fetch('deleteuser/' + userID, { method: "DELETE" })
                     .then(response => {
+                        this.loading = false;
                         if (!response.ok) {
                             this.msg = "Failed to remove user."
                             return;
@@ -278,12 +304,14 @@
                 this.loginMode = true;
             },
             login() {
+                this.loading = true;
                 const url = `login/${this.username}&${this.password}`;
                 this.setAllDisplaysNull();
                 fetch(url, {
                     method: 'POST',
                 })
                     .then(response => {
+                        this.loading = false;
                         if (!response.ok) {
                             this.msg = "Failed to login."
                             return;
@@ -293,13 +321,20 @@
                     })
                     .then(json => {
                         this.loggedIn = json;
+                        this.loading = false;
                     })
             },
+            logout() {
+                this.setAllDisplaysNull();
+                this.loggedIn = null;
+            },
             listUserStops() {
-                const url = `listuserstops/${this.loggedIn}`;
+                this.loading = true;
+                const url = `listuserstops/${this.loggedIn.id}`;
                 this.setAllDisplaysNull();
                 fetch(url)
                     .then(response => {
+                        this.loading = false;
                         if (!response.ok) {
                             this.msg = "Failed to show user stops."
                             return;
@@ -312,6 +347,38 @@
                         this.loading = false;
                         return;
                     });
+            },
+            addToUserFav(stopId) {
+                this.loading = true;
+                this.setAllDisplaysNull();
+                fetch(`addstop/${this.loggedIn.id}&${stopId}`, {
+                    method: 'POST',
+                })
+                    .then(response => {
+                        this.loading = false;
+                        if (!response.ok) {
+                            this.msg = "Failed to add to favourites."
+                            return;
+                        }
+
+                        return response.json();
+                    })
+            },
+            removeFromUserFav(stopId) {
+                this.loading = true;
+                this.setAllDisplaysNull();
+                fetch(`deletestop/${this.loggedIn.id}&${stopId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        this.loading = false;
+                        if (!response.ok) {
+                            this.msg = "Failed to remove from favourites."
+                            return;
+                        }
+
+                        return response.json();
+                    })
             }
         }
     })
@@ -358,6 +425,15 @@ header {
 
 .horizontal-menu li:hover {
     color: black;
+}
+
+h1 {
+    font-family: 'Arial', sans-serif;
+    color: #3498db; /* Blue color */
+    text-align: center;
+    padding: 20px;
+    background-color: #ecf0f1; /* Light gray background color */
+    border-bottom: 2px solid #bdc3c7; /* Gray border at the bottom */
 }
 
 @media (min-width: 1024px) {
