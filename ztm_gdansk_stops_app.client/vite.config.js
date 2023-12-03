@@ -46,7 +46,11 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '^/listusers': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/stops': {
                 target: 'https://localhost:7245/',
                 secure: false
             }

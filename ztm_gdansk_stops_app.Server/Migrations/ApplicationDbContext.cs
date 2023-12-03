@@ -22,4 +22,15 @@ public class ApplicationDbContext : DbContext
 
         optionsBuilder.UseSqlite(connection);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("Users");
+            entity.HasKey(e => e.Id);
+        });
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

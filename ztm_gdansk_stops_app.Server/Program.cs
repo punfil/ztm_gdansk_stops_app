@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
@@ -72,10 +73,14 @@ app.MapPost("/login", async (User user, ApplicationDbContext db) =>
 });
 
 
-app.MapGet("/listusers", async (ApplicationDbContext db) =>
-    await db.Users.ToListAsync());
+app.MapGet("/listusers",  (ApplicationDbContext db) =>
+{
+    var list = db.Users.ToArray();
+    return JsonSerializer.Serialize(list);
+});
 
-app.MapGet("/listuserbusstops/{userId}", async (int userId, ApplicationDbContext db) =>
+
+app.MapGet("/listuserstops/{userId}", async (int userId, ApplicationDbContext db) =>
 {
     var user = await db.Users.FirstAsync(u => u.Id == userId);
     var stopsId = Utils.getStops(user);
@@ -108,13 +113,15 @@ app.MapGet("/stopinfo/{stopId}", async (int stopId) =>
 );
 
 app.MapGet("/stops", async () =>
-    await memoryCache!.GetOrCreateAsync("stopinfo",
+{
+    var list = await memoryCache!.GetOrCreateAsync("stopinfo",
         async entry =>
         {
             return await fetchDataFromUri(
                 "https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json");
-        })
-);
+        });
+    return list;
+});
 
 // from query
 app.MapPost("/addstop", async (int userId, int stopId, ApplicationDbContext db) =>
