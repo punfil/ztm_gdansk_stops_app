@@ -16,7 +16,7 @@ public class ApplicationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var dbFileName = "ZTMDatabase.db";
-        var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "ZTMDatabase.db" };
+        var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = dbFileName };
         var connectionString = connectionStringBuilder.ToString();
         var connection = new SqliteConnection(connectionString);
 
