@@ -6,3 +6,8 @@ zalogowanie się użytkownika. Po zalogowaniu wyświetla użytkownikowi listę w
 tablic przystankowych (osobna dla każdego użytkownika). Tablica przystankowa zawiera listę
 niebawem odjeżdżających z tego przystanku, pojazdów ZTM. Użytkownik powinien mieć możliwość
 dodania i usunięcia przystanków z listy.
+
+## TODOs:
+### Backend:
+- Wykorzystanie ORM
+- Uwierzytelnianie/autoryzacja używając JWT

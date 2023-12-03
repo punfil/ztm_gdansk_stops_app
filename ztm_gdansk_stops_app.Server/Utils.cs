@@ -19,16 +19,16 @@ public class Utils
         return stops;
     }
 
-    public static async void addStop(User user, int busStopId, ApplicationDbContext db)
+    public static async void addStop(User user, int stopId, ApplicationDbContext db)
     {
         user.FavoriteStops ??= "";
 
         var stops = getStops(user);
 
-        if (!stops.Contains(busStopId))
+        if (!stops.Contains(stopId))
         {
             if (stops.Count > 0) user.FavoriteStops += " ";
-            user.FavoriteStops += busStopId;
+            user.FavoriteStops += stopId;
             await db.SaveChangesAsync();
         }
     }
