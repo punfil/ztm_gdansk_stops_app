@@ -5,53 +5,53 @@ namespace ztm_gdansk_stops_app.Server;
 
 public class Utils
 {
-    public static List<int> getBusStops(User user)
+    public static List<int> getStops(User user)
     {
-        List<int> busStops = new();
+        List<int> stops = new();
 
-        if (user.BusStops == null || user.BusStops.Length == 0) return busStops;
+        if (user.FavoriteStops == null || user.FavoriteStops.Length == 0) return stops;
 
-        if (user.BusStops.Contains(' '))
-            busStops = user.BusStops.Split(' ').Select(int.Parse).ToList();
+        if (user.FavoriteStops.Contains(' '))
+            stops = user.FavoriteStops.Split(' ').Select(int.Parse).ToList();
         else
-            busStops.Add(int.Parse(user.BusStops));
+            stops.Add(int.Parse(user.FavoriteStops));
 
-        return busStops;
+        return stops;
     }
 
-    public static async void addBusStop(User user, int busStopId, ApplicationDbContext db)
+    public static async void addStop(User user, int busStopId, ApplicationDbContext db)
     {
-        user.BusStops ??= "";
+        user.FavoriteStops ??= "";
 
-        var busStops = getBusStops(user);
+        var stops = getStops(user);
 
-        if (!busStops.Contains(busStopId))
+        if (!stops.Contains(busStopId))
         {
-            if (busStops.Count > 0) user.BusStops += " ";
-            user.BusStops += busStopId;
+            if (stops.Count > 0) user.FavoriteStops += " ";
+            user.FavoriteStops += busStopId;
             await db.SaveChangesAsync();
         }
     }
 
 
-    public static async void deleteBusStop(User user, int busStopId, ApplicationDbContext db)
+    public static async void deleteStop(User user, int stopId, ApplicationDbContext db)
     {
-        user.BusStops ??= "";
+        user.FavoriteStops ??= "";
 
-        List<int> busStops = new();
+        List<int> stops = new();
 
-        busStops = getBusStops(user);
+        stops = getStops(user);
 
-        if (busStops.Contains(busStopId))
+        if (stops.Contains(stopId))
         {
-            busStops = busStops.Where(u => u != busStopId).ToList();
+            stops = stops.Where(u => u != stopId).ToList();
 
-            var busStopsString = "";
-            foreach (var busStop in busStops) busStopsString += busStop + " ";
+            var stopsString = "";
+            foreach (var busStop in stops) stopsString += busStop + " ";
 
-            if (busStopsString.Length > 0) busStopsString = busStopsString.Remove(busStopsString.Length - 1);
+            if (stopsString.Length > 0) stopsString = stopsString.Remove(stopsString.Length - 1);
 
-            user.BusStops = busStopsString;
+            user.FavoriteStops = stopsString;
             await db.SaveChangesAsync();
         }
     }
