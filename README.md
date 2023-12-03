@@ -9,7 +9,6 @@ dodania i usunięcia przystanków z listy.
 
 ## TODOs:
 ### Backend:
-- Wykorzystanie ORM
 - Uwierzytelnianie/autoryzacja używając JWT
 
 ### Frontend:
