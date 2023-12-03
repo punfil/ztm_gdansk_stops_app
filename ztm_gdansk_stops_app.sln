@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ztm_gdansk_stops_app.Server", "ztm_gdansk_stops_app.Server\ztm_gdansk_stops_app.Server.csproj", "{31821716-11E9-4973-9E2F-49EC3BEC43C3}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ztm_gdansk_stops_app.client", "ztm_gdansk_stops_app.client\ztm_gdansk_stops_app.client.esproj", "{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31821716-11E9-4973-9E2F-49EC3BEC43C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31821716-11E9-4973-9E2F-49EC3BEC43C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31821716-11E9-4973-9E2F-49EC3BEC43C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31821716-11E9-4973-9E2F-49EC3BEC43C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFEF48E1-6302-47E9-8E4F-84CD5A4C3AD8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D768754F-AFE2-46A3-A52B-59B38B592B4E}
+	EndGlobalSection
+EndGlobal
