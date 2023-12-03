@@ -31,8 +31,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/adduser", async (User user, ApplicationDbContext db) =>
+app.MapPost("/adduser/{id}&{username}&{password}", async (int id, string username, string password, ApplicationDbContext db) =>
 {
+    var user = new User(id, username, password);
     db.Users.Add(user);
     await db.SaveChangesAsync();
 
@@ -52,11 +53,11 @@ app.MapDelete("/deleteuser/{id}", async (int id, ApplicationDbContext db) =>
 });
 
 
-app.MapPost("/login", async (User user, ApplicationDbContext db) =>
+app.MapPost("/login/{username}&{password}", async (string username, string password, ApplicationDbContext db) =>
 {
     try
     {
-        var userFromDb = await db.Users.FirstAsync(u => u.Login == user.Login && u.Password == user.Password);
+        var userFromDb = await db.Users.FirstAsync(u => u.Login == username && u.Password == password);
 
         if (userFromDb != null)
         {

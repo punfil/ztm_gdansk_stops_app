@@ -53,6 +53,34 @@ export default defineConfig({
             '^/stops': {
                 target: 'https://localhost:7245/',
                 secure: false
+            },
+            '^/stopinfo': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/adduser': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/deleteuser': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/login': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/listuserstops': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/addstop': {
+                target: 'https://localhost:7245/',
+                secure: false
+            },
+            '^/deletestop': {
+                target: 'https://localhost:7245/',
+                secure: false
             }
         },
         port: 5173,

@@ -6,4 +6,12 @@ public class User
     public string? Login { get; set; }
     public string? Password { get; set; }
     public string? FavoriteStops { get; set; }
+
+    public User(int id, string login, string password)
+    {
+        this.Id = id;
+        this.Login = login;
+        this.Password = password;
+        this.FavoriteStops = "";
+    }
 }
