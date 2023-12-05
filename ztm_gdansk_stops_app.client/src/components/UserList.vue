@@ -2,27 +2,35 @@
     <div v-if="this.$store.state.usersList" class="content">
         <button v-on:click="addUserTrigger">Add user</button>
         <h2>Users:</h2>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Login</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in this.$store.state.usersList" :key="user.Id">
-                    <td>{{ user.Id }}</td>
-                    <td>{{ user.Login }}</td>
-                    <td v-if="user.Id != this.$store.state.loggedIn" v-on:click="deleteUser(user.Id)">Remove user</td>
-                </tr>
-            </tbody>
-        </table>
+        <vue-good-table :columns="columns" :rows="this.$store.state.usersList">
+            <template #table-row="props">
+                <span v-if="props.column.field == 'action'">
+                    <button v-on:click="deleteUser(props.row.Id)">Remove user</button>
+                </span>
+            </template>
+        </vue-good-table>
     </div>
 </template>
 
 <script>
+    import { ref } from 'vue';
+    import { VueGoodTable } from 'vue-good-table-next';
+    import 'vue-good-table-next/dist/vue-good-table-next.css'
     export default {
+        components: {
+            VueGoodTable,
+        },
+        setup() {
+            const columns = ref([
+                { label: 'Id', field: 'Id' },
+                { label: 'Login', field: 'Login' },
+                { label: 'Action', field: 'action', sortable: false },
+            ]);
+
+            return {
+                columns,
+            };
+        },
         methods: {
             addUserTrigger() {
                 this.$store.commit('setAllDisplaysNull');
