@@ -3,188 +3,183 @@
 </script>
 
 <template>
-    <ul class="horizontal-menu">
-        <li v-on:click="fetchUsers">List users</li>
-        <li v-on:click="fetchStops">List stops</li>
-        <li v-if="!this.$store.state.loggedIn" v-on:click="loginTrigger">Login</li>
-        <li v-if="this.$store.state.loggedIn" v-on:click="listUserStops">List user favourite stops</li>
-        <li v-if="this.$store.state.loggedIn" v-on:click="logout">Logout</li>
-    </ul>
-    <br />
-    <h1>
-        RAILAB4 184657 Panfil Wojciech - zkm_gdansk_stops_app
-    </h1>
-    <br />
-    <header v-if="this.$store.state.msg" class="error">
-        {{ this.$store.state.msg }}
-    </header>
-    <!---Placebo for loading -->
-    <div v-if="this.$store.state.loading" class="loading">
-        Fetching latest data just for you!
-    </div>
-    <!-- List users -->
-    <div v-if="this.$store.state.usersList" class="content">
-        <button v-on:click="addUserTrigger">Add user</button>
-        <h2>Users:</h2>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Login</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in this.$store.state.usersList" :key="user.Id">
-                    <td>{{ user.Id }}</td>
-                    <td>{{ user.Login }}</td>
-                    <td v-if="user.Id != this.$store.state.loggedIn" v-on:click="deleteUser(user.Id)">Remove user</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- List stops -->
-    <div v-if="this.$store.state.stops" class="content">
-        <h2>Stops:</h2>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Stop ID</th>
-                    <th>Stop Name</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="stop in this.$store.state.stops" :key="stop.stopId">
-                    <td>{{ stop.stopId }}</td>
-                    <td>{{ stop.stopDesc }}</td>
-                    <td>{{ stop.stopLat }}</td>
-                    <td>{{ stop.stopLon }}</td>
-                    <td>
-                        <button v-on:click="showStopDetails(stop.stopId)">Show delays</button>
-                        <button v-if="this.$store.state.loggedIn" v-on:click="addToUserFav(stop.stopId)">Add to favourites</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!--- Stop info -->
-    <div v-if="this.$store.state.stopInfo" class="content">
-        <h2>Stop details:</h2>
-        <p>Last update: {{ this.$store.state.stopInfo.lastUpdate }}</p>
-        <h3>Delays:</h3>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Delay (seconds)</th>
-                    <th>Estimated Time</th>
-                    <th>Headsign</th>
-                    <th>Route Id</th>
-                    <th>Trip Id</th>
-                    <th>Status</th>
-                    <th>Theoretical Time</th>
-                    <th>Timestamp</th>
-                    <th>Trip</th>
-                    <th>Vehicle Code</th>
-                    <th>Vehicle Id</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="delayInfo in this.$store.state.stopInfo.delay" :key="delayInfo.id">
-                    <td>{{ delayInfo.id }}</td>
-                    <td>{{ delayInfo.delayInSeconds }}</td>
-                    <td>{{ delayInfo.estimatedTime }}</td>
-                    <td>{{ delayInfo.headsign }}</td>
-                    <td>{{ delayInfo.routeId }}</td>
-                    <td>{{ delayInfo.tripId }}</td>
-                    <td>{{ delayInfo.status }}</td>
-                    <td>{{ delayInfo.theoreticalTime }}</td>
-                    <td>{{ delayInfo.timestamp }}</td>
-                    <td>{{ delayInfo.trip }}</td>
-                    <td>{{ delayInfo.vehicleCode }}</td>
-                    <td>{{ delayInfo.vehicleId }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- Add user form -->
-    <div v-if="this.$store.state.addUserMode">
-        <h2>Add new user:</h2>
-        <form @submit.prevent="addUser">
-            <label for="id">User ID:</label>
-            <input type="number" v-model="id" required>
+        <my-menu :usersList="this.$store.state.usersList"
+               :loggedIn="this.$store.state.loggedIn"/>
+        <br />
+        <h1>
+            RAILAB4 184657 Panfil Wojciech - zkm_gdansk_stops_app
+        </h1>
+        <br />
+        <header v-if="this.$store.state.msg" class="error">
+            {{ this.$store.state.msg }}
+        </header>
+        <!---Placebo for loading -->
+        <div v-if="this.$store.state.loading" class="loading">
+            Fetching latest data just for you!
+        </div>
+        <!-- List users -->
+        <div v-if="this.$store.state.usersList" class="content">
+            <button v-on:click="addUserTrigger">Add user</button>
+            <h2>Users:</h2>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Login</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in this.$store.state.usersList" :key="user.Id">
+                        <td>{{ user.Id }}</td>
+                        <td>{{ user.Login }}</td>
+                        <td v-if="user.Id != this.$store.state.loggedIn" v-on:click="deleteUser(user.Id)">Remove user</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- List stops -->
+        <div v-if="this.$store.state.stops" class="content">
+            <h2>Stops:</h2>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Stop ID</th>
+                        <th>Stop Name</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="stop in this.$store.state.stops" :key="stop.stopId">
+                        <td>{{ stop.stopId }}</td>
+                        <td>{{ stop.stopDesc }}</td>
+                        <td>{{ stop.stopLat }}</td>
+                        <td>{{ stop.stopLon }}</td>
+                        <td>
+                            <button v-on:click="showStopDetails(stop.stopId)">Show delays</button>
+                            <button v-if="this.$store.state.loggedIn" v-on:click="addToUserFav(stop.stopId)">Add to favourites</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--- Stop info -->
+        <div v-if="this.$store.state.stopInfo" class="content">
+            <h2>Stop details:</h2>
+            <p>Last update: {{ this.$store.state.stopInfo.lastUpdate }}</p>
+            <h3>Delays:</h3>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Delay (seconds)</th>
+                        <th>Estimated Time</th>
+                        <th>Headsign</th>
+                        <th>Route Id</th>
+                        <th>Trip Id</th>
+                        <th>Status</th>
+                        <th>Theoretical Time</th>
+                        <th>Timestamp</th>
+                        <th>Trip</th>
+                        <th>Vehicle Code</th>
+                        <th>Vehicle Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="delayInfo in this.$store.state.stopInfo.delay" :key="delayInfo.id">
+                        <td>{{ delayInfo.id }}</td>
+                        <td>{{ delayInfo.delayInSeconds }}</td>
+                        <td>{{ delayInfo.estimatedTime }}</td>
+                        <td>{{ delayInfo.headsign }}</td>
+                        <td>{{ delayInfo.routeId }}</td>
+                        <td>{{ delayInfo.tripId }}</td>
+                        <td>{{ delayInfo.status }}</td>
+                        <td>{{ delayInfo.theoreticalTime }}</td>
+                        <td>{{ delayInfo.timestamp }}</td>
+                        <td>{{ delayInfo.trip }}</td>
+                        <td>{{ delayInfo.vehicleCode }}</td>
+                        <td>{{ delayInfo.vehicleId }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Add user form -->
+        <div v-if="this.$store.state.addUserMode">
+            <h2>Add new user:</h2>
+            <form @submit.prevent="addUser">
+                <label for="id">User ID:</label>
+                <input type="number" v-model="id" required>
 
-            <label for="username">Username:</label>
-            <input type="text" v-model="username" required>
+                <label for="username">Username:</label>
+                <input type="text" v-model="username" required>
 
-            <label for="password">Password:</label>
-            <input type="password" v-model="password" required>
+                <label for="password">Password:</label>
+                <input type="password" v-model="password" required>
 
-            <button type="submit">Add User</button>
-        </form>
-    </div>
-    <!-- Login form -->
-    <div v-if="this.$store.state.loginMode">
-        <h2>Login:</h2>
-        <form @submit.prevent="login">
-            <label for="username">Username:</label>
-            <input type="text" v-model="username" required>
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+        <!-- Login form -->
+        <div v-if="this.$store.state.loginMode">
+            <h2>Login:</h2>
+            <form @submit.prevent="login">
+                <label for="username">Username:</label>
+                <input type="text" v-model="username" required>
 
-            <label for="password">Password:</label>
-            <input type="password" v-model="password" required>
+                <label for="password">Password:</label>
+                <input type="password" v-model="password" required>
 
-            <button type="submit">Login</button>
-        </form>
-    </div>
-    <!-- List user stops -->
-    <div v-if="this.$store.state.userStops" class="content">
-        <h2>User stops:</h2>
-        <ul>
-            <li v-for="stop in this.$store.state.userStops" :key="stop.stopId">
-                <strong>Stop ID:</strong> {{ stop.stopId }}<br>
-                <strong>Last Update:</strong> {{ stop.lastUpdate }}<br>
-                <strong>Delays:</strong>
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Delay (seconds)</th>
-                            <th>Estimated Time</th>
-                            <th>Headsign</th>
-                            <th>Route Id</th>
-                            <th>Trip Id</th>
-                            <th>Status</th>
-                            <th>Theoretical Time</th>
-                            <th>Timestamp</th>
-                            <th>Trip</th>
-                            <th>Vehicle Code</th>
-                            <th>Vehicle Id</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="delayInfo in stop.delays" :key="delayInfo.id">
-                            <td>{{ delayInfo.id }}</td>
-                            <td>{{ delayInfo.delayInSeconds }}</td>
-                            <td>{{ delayInfo.estimatedTime }}</td>
-                            <td>{{ delayInfo.headsign }}</td>
-                            <td>{{ delayInfo.routeId }}</td>
-                            <td>{{ delayInfo.tripId }}</td>
-                            <td>{{ delayInfo.status }}</td>
-                            <td>{{ delayInfo.theoreticalTime }}</td>
-                            <td>{{ delayInfo.timestamp }}</td>
-                            <td>{{ delayInfo.trip }}</td>
-                            <td>{{ delayInfo.vehicleCode }}</td>
-                            <td>{{ delayInfo.vehicleId }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button v-on:click="removeFromUserFav(stop.stopId)">Remove from favourite</button>
-            </li>
-        </ul>
-    </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <!-- List user stops -->
+        <div v-if="this.$store.state.userStops" class="content">
+            <h2>User stops:</h2>
+            <ul>
+                <li v-for="stop in this.$store.state.userStops" :key="stop.stopId">
+                    <strong>Stop ID:</strong> {{ stop.stopId }}<br>
+                    <strong>Last Update:</strong> {{ stop.lastUpdate }}<br>
+                    <strong>Delays:</strong>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Delay (seconds)</th>
+                                <th>Estimated Time</th>
+                                <th>Headsign</th>
+                                <th>Route Id</th>
+                                <th>Trip Id</th>
+                                <th>Status</th>
+                                <th>Theoretical Time</th>
+                                <th>Timestamp</th>
+                                <th>Trip</th>
+                                <th>Vehicle Code</th>
+                                <th>Vehicle Id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="delayInfo in stop.delays" :key="delayInfo.id">
+                                <td>{{ delayInfo.id }}</td>
+                                <td>{{ delayInfo.delayInSeconds }}</td>
+                                <td>{{ delayInfo.estimatedTime }}</td>
+                                <td>{{ delayInfo.headsign }}</td>
+                                <td>{{ delayInfo.routeId }}</td>
+                                <td>{{ delayInfo.tripId }}</td>
+                                <td>{{ delayInfo.status }}</td>
+                                <td>{{ delayInfo.theoreticalTime }}</td>
+                                <td>{{ delayInfo.timestamp }}</td>
+                                <td>{{ delayInfo.trip }}</td>
+                                <td>{{ delayInfo.vehicleCode }}</td>
+                                <td>{{ delayInfo.vehicleId }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button v-on:click="removeFromUserFav(stop.stopId)">Remove from favourite</button>
+                </li>
+            </ul>
+        </div>
 </template>
 
 <script lang="js">
@@ -199,28 +194,6 @@
             
         },
         methods: {
-            fetchUsers() {
-                this.$store.commit('setLoading', true);
-                this.$store.commit('setAllDisplaysNull');
-                fetch('listusers')
-                    .then(r => r.json())
-                    .then(json => {
-                        this.$store.commit('setUsersList', json);
-                        this.$store.commit('setLoading', false);
-                        return;
-                    });
-            },
-            fetchStops() {
-                this.$store.commit('setLoading', true);
-                this.$store.commit('setAllDisplaysNull');
-                fetch('stops')
-                    .then(r => r.json())
-                    .then(json => {
-                        this.$store.commit('setStops', json[this.getFormattedDate()].stops);
-                        this.$store.commit('setLoading', false);
-                        return;
-                    });
-            },
             showStopDetails(stopID) {
                 this.$store.commit('setLoading', true);
                 this.$store.commit('setAllDisplaysNull');
@@ -231,17 +204,6 @@
                         this.$store.commit('setLoading', false);
                         return;
                     });
-            },
-            getFormattedDate() {
-                const today = new Date();
-                const year = today.getFullYear();
-                let month = today.getMonth() + 1;
-                let day = today.getDate();
-
-                month = month < 10 ? `0${month}` : month;
-                day = day < 10 ? `0${day}` : day;
-
-                return `${year}-${month}-${day}`;
             },
             addUserTrigger() {
                 this.$store.commit('setAllDisplaysNull');
@@ -280,10 +242,6 @@
                         return;
                     })
             },
-            loginTrigger() {
-                this.$store.commit('setAllDisplaysNull');
-                this.$store.commit('setLoginMode', true);
-            },
             login() {
                 this.$store.commit('setLoading', true);
                 this.$store.commit('setAllDisplaysNull');
@@ -304,30 +262,6 @@
                         this.$store.commit('setLoggedIn', json);
                         this.$store.commit('setLoading', false);
                     })
-            },
-            logout() {
-                this.$store.commit('setAllDisplaysNull');
-                this.$store.commit('setLoggedIn', null);
-            },
-            listUserStops() {
-                this.$store.commit('setLoading', true);
-                this.$store.commit('setAllDisplaysNull');
-                const url = `listuserstops/${this.$store.state.loggedIn.id}`;
-                fetch(url)
-                    .then(response => {
-                        this.$store.commit('setLoading', false);
-                        if (!response.ok) {
-                            this.$store.commit('setMsg', "Failed to show user stops.");
-                            return;
-                        }
-
-                        return response.json();
-                    })
-                    .then(json => {
-                        this.$store.commit('setUserStops', json);
-                        this.$store.commit('setLoading', false);
-                        return;
-                    });
             },
             addToUserFav(stopId) {
                 this.$store.commit('setLoading', true);
@@ -388,24 +322,6 @@ header {
 
 .styled-table tr:hover {
     background-color: darkslategray;
-}
-
-.horizontal-menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.horizontal-menu li {
-    padding: 10px;
-    color: gray;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.horizontal-menu li:hover {
-    color: black;
 }
 
 h1 {
