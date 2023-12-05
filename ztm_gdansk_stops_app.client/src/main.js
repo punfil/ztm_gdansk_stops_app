@@ -11,10 +11,13 @@ import UserStops from '@/components/UserStops.vue'
 import LoginForm from '@/components/LoginForm.vue'
 import AddUserForm from '@/components/AddUserForm.vue'
 import AuthorHeaderPlugin from "@/plugins/myplugin.js";
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
 const app = createApp(App)
 app.use(store)
 app.use(AuthorHeaderPlugin)
+app.use(Toast)
 app.component('my-menu', Menu)
 app.component('user-list', UserList)
 app.component('stops-list', StopsList)
