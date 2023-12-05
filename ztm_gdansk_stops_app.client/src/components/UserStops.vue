@@ -9,18 +9,18 @@
                 <table class="styled-table">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Delay (seconds)</th>
-                            <th>Estimated Time</th>
-                            <th>Headsign</th>
-                            <th>Route Id</th>
-                            <th>Trip Id</th>
-                            <th>Status</th>
-                            <th>Theoretical Time</th>
-                            <th>Timestamp</th>
-                            <th>Trip</th>
-                            <th>Vehicle Code</th>
-                            <th>Vehicle Id</th>
+                            <dummyth ParentMessage='Id'/>
+                            <dummyth ParentMessage='Delay (seconds)'/>
+                            <dummyth ParentMessage='Estimated Time' />
+                            <dummyth ParentMessage='Headsign' />
+                            <dummyth ParentMessage='Route Id'/>
+                            <dummyth ParentMessage='Trip Id'/>
+                            <dummyth ParentMessage='Status' />
+                            <dummyth ParentMessage='Theoretical Time'/>
+                            <dummyth ParentMessage='Timestamp'/>
+                            <dummyth ParentMessage='Trip'/>
+                            <dummyth ParentMessage='Vehicle Code' />
+                            <dummyth ParentMessage='Vehicle Id' />
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,11 @@
 </template>
 
 <script>
+    import Dummyth from '@/components/Dummyth.vue'
     export default {
+        components: {
+            Dummyth,
+        },
         methods: {
             removeFromUserFav(stopId) {
                 this.$store.commit('setLoading', true);
