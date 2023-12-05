@@ -5,7 +5,7 @@
 <template>
         <my-menu />
         <br />
-        <h1>
+        <h1 :class="{ 'highlight': isHighlighted }">
             RAILAB4 184657 Panfil Wojciech - zkm_gdansk_stops_app
         </h1>
         <br />
@@ -28,16 +28,32 @@
         <login-form/>
         <!-- List user stops -->
         <user-stops/>
+
+        <button @click="toggleHighlight">Trick or treat</button>
 </template>
 
 <script lang="js">
     import { defineComponent } from 'vue';
 
     export default defineComponent({
+        data() {
+            return {
+                isHighlighted: false,
+            };
+        },
+        methods: {
+            toggleHighlight() {
+                this.isHighlighted = !this.isHighlighted;
+            },
+        },
     })
 </script>
 
 <style>
+.highlight {
+    color: red;
+    font-weight: bold;
+}
 header {
   line-height: 1.5;
 }
