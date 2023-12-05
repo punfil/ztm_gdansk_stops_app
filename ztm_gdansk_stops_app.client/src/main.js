@@ -9,6 +9,7 @@ import StopsList from '@/components/StopsList.vue'
 import StopInfo from '@/components/StopInfo.vue'
 import UserStops from '@/components/UserStops.vue'
 import LoginForm from '@/components/LoginForm.vue'
+import AddUserForm from '@/components/AddUserForm.vue'
 
 const app = createApp(App)
 app.use(store)
@@ -18,4 +19,5 @@ app.component('stops-list', StopsList)
 app.component('stop-info', StopInfo)
 app.component('user-stops', UserStops)
 app.component('login-form', LoginForm)
+app.component('add-user-form', AddUserForm)
 app.mount('#app')
