@@ -7,6 +7,7 @@ import Menu from '@/components/Menu.vue'
 import UserList from '@/components/UserList.vue'
 import StopsList from '@/components/StopsList.vue'
 import StopInfo from '@/components/StopInfo.vue'
+import UserStops from '@/components/UserStops.vue'
 
 const app = createApp(App)
 app.use(store)
@@ -14,4 +15,5 @@ app.component('my-menu', Menu)
 app.component('user-list', UserList)
 app.component('stops-list', StopsList)
 app.component('stop-info', StopInfo)
+app.component('user-stops', UserStops)
 app.mount('#app')
