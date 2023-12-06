@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import Dummyth from '@/components/Dummyth.vue';
 import DummyInput from '@/components/DummyInput.vue';
-
+//Run using npm test
 describe('Dummyth', () => {
     it('renders the prop value in the <th> element', () => {
         const parentMessage = 'Test Message';

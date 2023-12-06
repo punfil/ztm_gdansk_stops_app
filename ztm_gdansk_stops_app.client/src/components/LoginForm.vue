@@ -10,8 +10,8 @@
             <label for="username">Username:</label>
             <DummyInput v-model="username" />
             <label for="password">Password:</label>
-            <input type="password" v-model="password" required>
-            <button type="submit">Login</button>
+            <input data-cy="password" type="password" v-model="password" required>
+            <button data-cy="submit" type="submit">Login</button>
         </form>
     </div>
 </template>

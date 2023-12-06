@@ -7,7 +7,7 @@
         <br />
         <author-header>
             <br />
-            <header v-if="this.$store.state.msg" class="error">
+            <header data-cy="msg" v-if="this.$store.state.msg" class="error">
                 {{ this.$store.state.msg }}
             </header>
             <!---Placebo for loading -->
