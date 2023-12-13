@@ -41,7 +41,12 @@
                 this.$store.commit('setLoading', true);
                 this.$store.commit('setAllDisplaysNull');
                 const url = `listuserstops/${this.$store.state.loggedIn.id}`;
-                fetch(url)
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `${this.$store.state.loggedIn.token}`
+                    },
+                })
                     .then(response => {
                         this.$store.commit('setLoading', false);
                         if (!response.ok) {

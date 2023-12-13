@@ -1,12 +1,16 @@
-using System.Drawing.Printing;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ztm_gdansk_stops_app.Server;
-using ztm_gdansk_stops_app.Server.Helpers;
 using ztm_gdansk_stops_app.Server.Migrations;
 using ztm_gdansk_stops_app.Server.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 var client = new HttpClient();
@@ -15,16 +19,33 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidAudience = "your-hardcoded-audience",
+            ValidIssuer = "your-hardcoded-issuer",
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-hardcoded-key"))
+        };
+    });
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 var memoryCache = app.Services.GetService<IMemoryCache>();
 
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<JwtMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -63,7 +84,20 @@ app.MapPost("/login/{username}&{password}", async (string username, string passw
 
         if (userFromDb != null)
         {
-            var data = new { id = userFromDb.Id };
+            // Generate JWT token
+            var usernameClaim = new Claim("id", userFromDb.Id.ToString());
+            var securityKey = new
+                SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-hardcoded-keyasdasdasdadasdasdad"));
+            var credentials = new SigningCredentials(securityKey,
+                SecurityAlgorithms.HmacSha256);
+            var tokenstr = new JwtSecurityToken("your - hardcoded - issuesaaaaaaaaaaaaa",
+                "your-hardcoded-audienceaaaaaaaaaaaaa",
+                new List<Claim> { usernameClaim },
+                expires: DateTime.Now.AddMinutes(120),
+                signingCredentials: credentials);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenstr);
+            // Return the token in the response
+            var data = new { id = userFromDb.Id, token = tokenString };
             return Results.Ok(data);
         }
 
@@ -83,10 +117,15 @@ app.MapGet("/listusers",  (ApplicationDbContext db) =>
 });
 
 
-app.MapGet("/listuserstops/{userId}", async (int userId, ApplicationDbContext db) =>
+app.MapGet("/listuserstops/{userId}", async (HttpContext context, int userId, ApplicationDbContext db) =>
 {
     var user = await db.Users.FirstAsync(u => u.Id == userId);
     var stopsId = Utils.getStops(user);
+
+    if (!VerifyToken(context.Request.Headers["Authorization"].FirstOrDefault(), userId))
+    {
+        return null;
+    }
 
     var arrayWraps = new List<UserData>();
 
@@ -173,3 +212,36 @@ app.MapGet("/", () => "Hello World!");
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+
+bool VerifyToken(string token, int userId)
+{
+    try
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = new HMACSHA512(Encoding.UTF8.GetBytes("your-hardcoded-keyasdasdasdadasdasdad"));
+        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = false,
+            IssuerSigningKey = new SymmetricSecurityKey(key.Key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero,
+            RequireSignedTokens = false,
+            RequireExpirationTime = false
+        }, out SecurityToken validatedToken);
+
+        var jwtToken = (JwtSecurityToken)validatedToken;
+        var claims = jwtToken.Claims;
+        if (claims.First(x => x.Type == "id").Value != userId.ToString())
+        {
+            throw new Exception();
+        }
+    }
+    catch (Exception)
+    {
+        return false;
+    }
+
+    return true;
+    
+}
