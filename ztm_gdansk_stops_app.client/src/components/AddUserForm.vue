@@ -34,6 +34,9 @@
                         }
 
                         this.$store.commit('setMsg', "User added!");
+                        this.id = null;
+                        this.username = null;
+                        this.password = null;
                         return;
                     })
             },

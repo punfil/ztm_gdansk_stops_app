@@ -44,6 +44,8 @@
                     .then(json => {
                         this.$store.commit('setLoggedIn', json);
                         this.$store.commit('setLoading', false);
+                        this.username = null;
+                        this.password = null;
                     })
             }
         }
