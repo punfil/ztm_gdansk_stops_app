@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using ztm_gdansk_stops_app.Server;
+using ztm_gdansk_stops_app.Server.Helpers;
 using ztm_gdansk_stops_app.Server.Migrations;
 using ztm_gdansk_stops_app.Server.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -23,6 +24,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<JwtMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
