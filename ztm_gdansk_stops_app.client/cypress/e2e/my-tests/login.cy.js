@@ -1,13 +1,14 @@
 //npm run cypress:open
 describe('Login', () => {
-    it('successfully logs in', () => {
+    it('Handles successful login', () => {
         // Mock server response for successful login
         cy.intercept('POST', '**/login/*', {
             statusCode: 200,
             body: {
                 // Provide any mock data needed for a successful login
-                userId: 123,
-                username: 'testuser',
+                userId: 1,
+                username: 'validUser',
+                passowrd: 'validPassword'
             },
         }).as('loginRequest');
 
@@ -16,8 +17,8 @@ describe('Login', () => {
         cy.visit('https://localhost:5173');
         cy.get('[data-cy=loginn]').click();
         // Fill in the login form
-        cy.get('[data-cy=username]').type('wpanfil');
-        cy.get('[data-cy=password]').type('1234');
+        cy.get('[data-cy=username]').type('validUser');
+        cy.get('[data-cy=password]').type('validPassword');
 
         // Submit the form
         cy.get('[data-cy=submit]').click();
@@ -29,7 +30,7 @@ describe('Login', () => {
         cy.get('[data-cy=logoutt]').should('exist');
     });
 
-    it('handles failed login', () => {
+    it('Handles failed login', () => {
         // Mock server response for failed login
         cy.intercept('POST', '**/login/*', {
             statusCode: 401,
@@ -45,8 +46,8 @@ describe('Login', () => {
         cy.get('[data-cy=loginn]').click();
 
         // Fill in the login form
-        cy.get('[data-cy=username]').type('invaliduser');
-        cy.get('[data-cy=password]').type('invalidpassword');
+        cy.get('[data-cy=username]').type('invalidUser');
+        cy.get('[data-cy=password]').type('invalidPassword');
 
         // Submit the form
         cy.get('[data-cy=submit]').click();
@@ -56,7 +57,7 @@ describe('Login', () => {
 
         // Check if an error message is displayed
         cy.get('@loginRequest').then(() => {
-            cy.get('[data-cy=msg]').should('have.text', 'Failed to login invaliduser');
+            cy.get('[data-cy=msg]').should('have.text', 'Failed to login invalidUser');
         });
     });
 });
