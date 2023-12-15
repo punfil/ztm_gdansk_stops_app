@@ -46,8 +46,6 @@
                     .then(json => {
                         this.$store.commit('setLoggedIn', json);
                         this.$store.commit('setLoading', false);
-                        if(!this.$store.state.msg)
-                            this.$store.commit('setMsg', json);
                         this.username = null;
                         this.password = null;
                     })
