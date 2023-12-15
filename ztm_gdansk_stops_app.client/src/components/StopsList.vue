@@ -1,34 +1,38 @@
 <template>
     <div v-if="this.$store.state.stops" class="content">
         <h2>Stops:</h2>
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Stop ID</th>
-                    <th>Stop Name</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="stop in this.$store.state.stops" :key="stop.stopId">
-                    <td>{{ stop.stopId }}</td>
-                    <td>{{ stop.stopDesc }}</td>
-                    <td>{{ stop.stopLat }}</td>
-                    <td>{{ stop.stopLon }}</td>
-                    <td>
-                        <button v-on:click="showStopDetails(stop.stopId)">Show delays</button>
-                        <button v-if="this.$store.state.loggedIn" v-on:click="addToUserFav(stop.stopId)">Add to favourites</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <vue-good-table :columns="columns" :rows="this.$store.state.stops">
+            <template #table-row="props">
+                <span v-if="props.column.field == 'action'">
+                    <button v-on:click="showStopDetails(props.row.stopId)">Show delays</button>
+                    <button v-if="this.$store.state.loggedIn" v-on:click="addToUserFav(props.row.stopId)">Add to favourites</button>
+                </span>
+            </template>
+        </vue-good-table>
     </div>
 </template>
 
 <script>
+    import { ref } from 'vue';
+    import { VueGoodTable } from 'vue-good-table-next';
+    import 'vue-good-table-next/dist/vue-good-table-next.css'
     export default {
+        components: {
+            VueGoodTable,
+        },
+        setup() {
+            const columns = ref([
+                { label: 'Stop ID', field: 'stopId' },
+                { label: 'Stop Name', field: 'stopDesc' },
+                { label: 'Latitude', field: 'stopLat' },
+                { label: 'Longitude', field: 'stopLon' },
+                { label: 'Action', field: 'action', sortable: false },
+            ]);
+
+            return {
+                columns,
+            };
+        },
         methods: {
             addToUserFav(stopId) {
                 this.$store.commit('setLoading', true);
