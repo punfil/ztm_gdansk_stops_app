@@ -12,6 +12,7 @@ const store = createStore({
             loginMode: false,
             userStops: null,
             msg: null,
+            isLightMode: false,
         }
     },
     mutations: {
@@ -50,6 +51,9 @@ const store = createStore({
         },
         setMsg(state, value) {
             state.msg = value;
+        },
+        setIsLightMode(state, value) {
+            state.isLightMode = value;
         },
     },
 });

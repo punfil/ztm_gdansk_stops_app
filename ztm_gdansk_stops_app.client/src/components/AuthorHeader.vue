@@ -1,9 +1,9 @@
 <template>
-    <h1 :class="{ 'highlight': isHighlighted }">
-        RAILAB4 184657 Panfil Wojciech - zkm_gdansk_stops_app
+    <h1>
+        Realizacja Aplikacji Internetowych - Projekt 4
     </h1>
     <slot></slot>
-    <button @click="toggleHighlight">Trick or treat</button>
+    <button @click="changeBackground">Switch color mode</button>
 </template>
 
 <script>
@@ -13,15 +13,10 @@
             const toast = useToast();
             return { toast }
         },
-        data() {
-            return {
-                isHighlighted: false,
-            };
-        },
         methods: {
-            toggleHighlight() {
-                this.isHighlighted = !this.isHighlighted;
-                this.toast("I am the author!", {
+            changeBackground() {
+                this.$store.commit('setIsLightMode', !this.$store.state.isLightMode);
+                this.toast("Changed color scheme!", {
                     position: "top-right",
                     timeout: 5000,
                     closeOnClick: true,
@@ -37,6 +32,5 @@
                 });
             },
         },
-        
     }
 </script>

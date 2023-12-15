@@ -9,8 +9,10 @@
         <form @submit.prevent="login">
             <label for="username">Username:</label>
             <DummyInput v-model="username" />
+            <br>
             <label for="password">Password:</label>
             <input data-cy="password" type="password" v-model="password" required>
+            <br>
             <button data-cy="submit" type="submit">Login</button>
         </form>
     </div>

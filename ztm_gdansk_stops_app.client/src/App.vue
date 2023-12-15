@@ -3,6 +3,7 @@
 </script>
 
 <template>
+    <div :class="{ 'LightMode': this.$store.state.isLightMode, 'DarkMode': !this.$store.state.isLightMode }">
         <my-menu />
         <br />
         <author-header>
@@ -27,6 +28,7 @@
             <!-- List user stops -->
             <user-stops />
         </author-header>
+    </div>
 </template>
 
 <script lang="js">
@@ -37,6 +39,14 @@
 </script>
 
 <style>
+
+.LightMode {
+    background-color: white;
+}
+.DarkMode {
+    background-color: black;
+}
+
 .highlight {
     color: red;
     font-weight: bold;
