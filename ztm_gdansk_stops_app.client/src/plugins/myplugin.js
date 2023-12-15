@@ -1,6 +1,6 @@
-import MyHeader from '@/components/AuthorHeader.vue';
+import Header from '@/components/InfoHeader.vue';
 export default {
     install: (app, options) => {
-        app.component("author-header", MyHeader);
+        app.component("info-header", Header);
     },
 };

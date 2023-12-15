@@ -6,7 +6,7 @@
     <div :class="{ 'LightMode': this.$store.state.isLightMode, 'DarkMode': !this.$store.state.isLightMode }">
         <my-menu />
         <br />
-        <author-header>
+        <info-header>
             <br />
             <header data-cy="msg" v-if="this.$store.state.msg" class="error">
                 {{ this.$store.state.msg }}
@@ -27,7 +27,7 @@
             <login-form />
             <!-- List user stops -->
             <user-stops />
-        </author-header>
+        </info-header>
     </div>
 </template>
 
