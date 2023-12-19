@@ -1,7 +1,7 @@
 <template>
     <ul class="horizontal-menu">
         <li v-on:click="fetchUsers">List users</li>
-        <li v-on:click="fetchStops">List stops</li>
+        <li data-cy="stopss" v-on:click="fetchStops">List stops</li>
         <li v-if="!this.$store.state.loggedIn" data-cy="loginn" v-on:click="loginTrigger">Login</li>
         <li v-if="this.$store.state.loggedIn" v-on:click="listUserStops">List user favourite stops</li>
         <li v-if="this.$store.state.loggedIn" data-cy="logoutt" v-on:click="logout">Logout</li>

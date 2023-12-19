@@ -4,7 +4,7 @@
         <vue-good-table :columns="columns" :rows="this.$store.state.stops">
             <template #table-row="props">
                 <span v-if="props.column.field == 'action'">
-                    <button v-on:click="showStopDetails(props.row.stopId)">Show delays</button>
+                    <button data-cy="showStopDetails" v-on:click="showStopDetails(props.row.stopId)">Show delays</button>
                     <button v-if="this.$store.state.loggedIn" v-on:click="addToUserFav(props.row.stopId)">Add to favourites</button>
                 </span>
             </template>
