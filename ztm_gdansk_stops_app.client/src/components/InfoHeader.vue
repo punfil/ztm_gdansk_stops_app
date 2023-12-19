@@ -3,7 +3,7 @@
         Realizacja Aplikacji Internetowych - Projekt 4
     </h1>
     <slot></slot>
-    <button @click="changeBackground">Switch color mode</button>
+    <button data-cy="backgroundButton" @click="changeBackground">Switch color mode</button>
 </template>
 
 <script>
