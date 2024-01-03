@@ -6,7 +6,7 @@ describe('Login', () => {
             body: {
                 userId: 1,
                 username: 'validUser',
-                passowrd: 'validPassword'
+                password: 'validPassword'
             },
         }).as('loginRequest');
         cy.visit('https://localhost:5173');

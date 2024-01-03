@@ -40,7 +40,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <button v-on:click="removeFromUserFav(stop.stopId)">Remove from favourite</button>
+                <button data-cy="removefav" v-on:click="removeFromUserFav(stop.stopId)">Remove from favourite</button>
             </li>
         </ul>
     </div>
